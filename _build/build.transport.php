@@ -35,8 +35,8 @@ set_time_limit(0);
 /* define version */
 define('PKG_NAME','Login');
 define('PKG_NAME_LOWER','login');
-define('PKG_VERSION','1.8.1');
-define('PKG_RELEASE','pl');
+define('PKG_VERSION','1.8.2');
+define('PKG_RELEASE','fs1');
 
 /* define sources */
 $root = dirname(dirname(__FILE__)).'/';
@@ -86,6 +86,14 @@ if (is_array($chunks)) {
     $category->addMany($chunks);
 } else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding chunks failed.'); }
 
+
+/* add plugins */
+$modx->log(modX::LOG_LEVEL_INFO,'Adding in plugins.');
+$plugins = include $sources['data'].'transport.plugins.php';
+if(is_array($plugins)) {
+    $category->addMany($plugins);
+} else { $modx->log(modX::LOG_LEVEL_FATAL,'Adding plugins failed.'); }
+
 /* create category vehicle */
 $attr = array(
     xPDOTransport::UNIQUE_KEY => 'category',
@@ -99,6 +107,11 @@ $attr = array(
             xPDOTransport::UNIQUE_KEY => 'name',
         ),
         'Chunks' => array(
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => false,
+            xPDOTransport::UNIQUE_KEY => 'name',
+        ),
+        'Plugins' => array (
             xPDOTransport::PRESERVE_KEYS => false,
             xPDOTransport::UPDATE_OBJECT => true,
             xPDOTransport::UNIQUE_KEY => 'name',

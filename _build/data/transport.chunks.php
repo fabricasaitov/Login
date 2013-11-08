@@ -117,4 +117,31 @@ $chunks[10]->fromArray(array(
     'properties' => '',
 ),'',true,true);
 
+$chunks[11]= $modx->newObject('modChunk');
+$chunks[11]->fromArray(array(
+	'id' => 11,
+	'name' => 'lgnRegisterEmailForUser',
+	'description' => '',
+	'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/lgnregisteremailforuser.chunk.tpl'),
+	'properties' => '',
+),'',true,true);
+
+$chunks[12]= $modx->newObject('modChunk');
+$chunks[12]->fromArray(array(
+	'id' => 12,
+	'name' => 'lgnRegisterEmailForAdmin',
+	'description' => '',
+	'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/lgnregisteremailforadmin.chunk.tpl'),
+	'properties' => '',
+),'',true,true);
+
+$chunks[13]= $modx->newObject('modChunk');
+$chunks[13]->fromArray(array(
+	'id' => 13,
+	'name' => 'lgnActivationEmailForUser',
+	'description' => '',
+	'snippet' => file_get_contents($sources['source_core'].'/elements/chunks/lgnactivationemailforuser.chunk.tpl'),
+	'properties' => '',
+),'',true,true);
+
 return $chunks;

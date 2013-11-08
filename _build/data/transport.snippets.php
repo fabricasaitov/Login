@@ -125,4 +125,12 @@ $properties = include $sources['data'].'properties/properties.activeusers.php';
 $snippets[9]->setProperties($properties);
 unset($properties);
 
+$snippets[10]= $modx->newObject('modSnippet');
+$snippets[10]->fromArray(array(
+	'id' => 10,
+	'name' => 'ActivationResult',
+	'description' => 'Shows result of user activation using url as user info.',
+	'snippet' => getSnippetContent($sources['source_core'].'/elements/snippets/activationresult.snippet.php'),
+),'',true,true);
+
 return $snippets;

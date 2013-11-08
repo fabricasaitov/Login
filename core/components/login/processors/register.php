@@ -247,15 +247,56 @@ class LoginRegisterProcessor extends LoginProcessor {
      * Send an activation email to the user with an encrypted username and password hash, to allow for secure
      * activation processes that are not vulnerable to middle-man attacks.
      *
+     * Also can send activation email to admin using activationEmailAdmin, activationEmailAdminTpl and activationEmailAdminSubject
+     *
      * @return boolean
      */
     public function sendActivationEmail() {
         $emailProperties = $this->gatherActivationEmailProperties();
 
+        if($activationEmailAdmin=$this->controller->getProperty('activationEmailAdmin',false,'isset')) {
+            $adminEmailProperties=$this->gatherActivationEmailAdminProperties($emailProperties);
+            $subject = $this->controller->getProperty('activationEmailAdminSubject',$this->modx->lexicon('register.activation_email_subject'));
+            $this->login->sendEmail($activationEmailAdmin,'',$subject,$adminEmailProperties);
+        }
         /* send either to user's email or a specified activation email */
         $activationEmail = $this->controller->getProperty('activationEmail',$this->user->get('email'));
         $subject = $this->controller->getProperty('activationEmailSubject',$this->modx->lexicon('register.activation_email_subject'));
         return $this->login->sendEmail($activationEmail,$this->user->get('username'),$subject,$emailProperties);
+    }
+
+    /**
+     * Trying to find action for user update action
+     */
+    private function getUserUpdateUrl() {
+        if($obAction=$this->modx->getObject('modAction',array('namespace'=>'core','controller'=>'security/user/update'))) {
+            $id=$obAction->get('id');
+            return MODX_URL_SCHEME.MODX_HTTP_HOST.MODX_MANAGER_URL.'index.php?id='.$this->user->get('id').'&a='.$id;
+        }
+        return false;
+    }
+
+    /**
+     * Method performs convertation of activation email for admin user purposes
+     * @param $emailProperties
+     * @return mixed
+     */
+    private function gatherActivationEmailAdminProperties($emailProperties) {
+        /* set confirmation email properties */
+        $emailTpl = $this->controller->getProperty('activationEmailAdminTpl','lgnRegisterEmailForAdmin');
+        $emailTplAlt = $this->controller->getProperty('activationEmailAdminTplAlt','');
+        $emailTplType = $this->controller->getProperty('activationEmailAdminTplType','modChunk');
+        $emailProperties['tpl'] = $emailTpl;
+        $emailProperties['tplAlt'] = $emailTplAlt;
+        $emailProperties['date'] = date('Y-m-d H:i:s');
+        $emailProperties['tplType'] = $emailTplType;
+        $emailProperties['activation_url']=$emailProperties['confirmUrl'];
+        if($url=$this->getUserUpdateUrl()) {
+            $emailProperties['view_url']=$url;
+        } else {
+            $emailProperties['view_url']='';
+        }
+        return $emailProperties;
     }
 
     /**

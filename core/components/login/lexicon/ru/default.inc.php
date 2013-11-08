@@ -32,6 +32,7 @@ $_lang['login.logout'] = 'Выход';
 $_lang['login.logout_err'] = 'Неизвестная ошибка при выходе!';
 $_lang['login.password'] = 'Пароль';
 $_lang['login.username'] = 'Имя пользователя';
+$_lang['login.notify_activation_email_subject'] = 'Ваша учётная запись активирована';
 
 $_lang['setting_login.forgot_password_confirm_resource'] = 'Идентификатор ресурса для подтверждения смены пароля';
 $_lang['setting_login.forgot_password_confirm_resource_desc'] = 'Введите идентификатор ресурса на котором будет происходить подтверждение смены пароля.';
